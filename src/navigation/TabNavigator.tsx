@@ -8,11 +8,21 @@ import { View, Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
-// Placeholder screens until modules are built
+// Placeholder screens until feature modules are built
+function HomeScreen() {
+  return (
+    <View className="flex-1 items-center justify-center bg-deep-900">
+      <Text className="text-white text-lg">Home</Text>
+      <Text className="text-deep-300 text-sm mt-2">Your recovery journey</Text>
+    </View>
+  );
+}
+
 function CommunityScreen() {
   return (
     <View className="flex-1 items-center justify-center bg-deep-900">
       <Text className="text-white text-lg">Community</Text>
+      <Text className="text-deep-300 text-sm mt-2">Connect with peers</Text>
     </View>
   );
 }
@@ -21,14 +31,7 @@ function EmergencyScreen() {
   return (
     <View className="flex-1 items-center justify-center bg-deep-900">
       <Text className="text-white text-lg">Emergency</Text>
-    </View>
-  );
-}
-
-function JournalScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Journal</Text>
+      <Text className="text-deep-300 text-sm mt-2">Reach someone now</Text>
     </View>
   );
 }
@@ -37,16 +40,17 @@ function ProfileScreen() {
   return (
     <View className="flex-1 items-center justify-center bg-deep-900">
       <Text className="text-white text-lg">Profile</Text>
+      <Text className="text-deep-300 text-sm mt-2">Your account</Text>
     </View>
   );
 }
 
-// Simple TabBar icon component using characters
+// Simple TabBar icon component
 function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   const icons: Record<string, string> = {
+    Home: '🏠',
     Community: '💬',
     Emergency: '🆘',
-    Journal: '📓',
     Profile: '👤',
   };
 
@@ -60,8 +64,11 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
 }
 
 export default function TabNavigator() {
+  const isEmergency = false; // Will be connected to emergency state later
+
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => (
           <TabIcon label={route.name} focused={focused} />
@@ -92,6 +99,11 @@ export default function TabNavigator() {
       })}
     >
       <Tab.Screen
+        name="Home"
+        component={isEmergency ? EmergencyScreen : HomeScreen}
+        options={{ title: 'Home' }}
+      />
+      <Tab.Screen
         name="Community"
         component={CommunityScreen}
         options={{ title: 'Community' }}
@@ -99,12 +111,10 @@ export default function TabNavigator() {
       <Tab.Screen
         name="Emergency"
         component={EmergencyScreen}
-        options={{ title: 'Emergency' }}
-      />
-      <Tab.Screen
-        name="Journal"
-        component={JournalScreen}
-        options={{ title: 'Journal' }}
+        options={{
+          title: 'Emergency',
+          tabBarBadge: undefined,
+        }}
       />
       <Tab.Screen
         name="Profile"

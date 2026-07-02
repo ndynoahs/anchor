@@ -17,8 +17,16 @@ export class AppError extends Error {
 
 // --- User ---
 export interface User {
-  id: string;
+  userId: string;
   anonymousUsername: string;
+  avatarUrl: string | null;
+  email?: string;
+  timezone: string;
+  isPremium: boolean;
+  premiumExpiresAt?: string;
+  streakDays: number;
+  longestStreak: number;
+  soberSince?: string;
   createdAt: string;
   lastActiveAt: string;
   preferences: UserPreferences;
@@ -34,18 +42,40 @@ export interface UserPreferences {
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
-  expiresAt: number;
+  expiresIn: number;
 }
 
 export interface RegisterRequest {
-  anonymousUsername: string;
-  password: string;
-  confirmPassword: string;
+  email?: string;
+  timezone?: string;
+  fcmToken?: string;
 }
 
 export interface LoginRequest {
-  anonymousUsername: string;
+  email: string;
   password: string;
+}
+
+export interface RegisterResponse {
+  user: {
+    userId: string;
+    anonymousUsername: string;
+    avatarUrl: string;
+    timezone: string;
+    createdAt: string;
+  };
+  tokens: AuthTokens;
+}
+
+export interface LoginResponse {
+  user: {
+    userId: string;
+    anonymousUsername: string;
+    avatarUrl: string;
+    isPremium: boolean;
+    lastActiveAt: string;
+  };
+  tokens: AuthTokens;
 }
 
 export interface AuthResponse {
