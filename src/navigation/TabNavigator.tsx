@@ -6,44 +6,18 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 
+import HomeScreen from '../modules/community/HomeScreen';
+import CommunityScreen from '../modules/community/CommunityScreen';
+import EmergencyScreen from '../modules/emergency/EmergencyScreen';
+import JournalListScreen from '../modules/journal/JournalListScreen';
+import ProfileStackNavigator from './ProfileStackNavigator';
+
 const Tab = createBottomTabNavigator();
 
-// Placeholder screens until modules are built
-function CommunityScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Community</Text>
-    </View>
-  );
-}
-
-function EmergencyScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Emergency</Text>
-    </View>
-  );
-}
-
-function JournalScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Journal</Text>
-    </View>
-  );
-}
-
-function ProfileScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Profile</Text>
-    </View>
-  );
-}
-
-// Simple TabBar icon component using characters
+// TabBar icon component
 function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   const icons: Record<string, string> = {
+    Home: '🏠',
     Community: '💬',
     Emergency: '🆘',
     Journal: '📓',
@@ -51,7 +25,7 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   };
 
   return (
-    <View className="items-center">
+    <View className="items-center" accessibilityLabel={label}>
       <Text className={`text-xl ${focused ? 'opacity-100' : 'opacity-50'}`}>
         {icons[label] || '•'}
       </Text>
@@ -62,6 +36,7 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
 export default function TabNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => (
           <TabIcon label={route.name} focused={focused} />
@@ -92,24 +67,29 @@ export default function TabNavigator() {
       })}
     >
       <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: 'Home', headerShown: false }}
+      />
+      <Tab.Screen
         name="Community"
         component={CommunityScreen}
-        options={{ title: 'Community' }}
+        options={{ title: 'Community', headerShown: false }}
       />
       <Tab.Screen
         name="Emergency"
         component={EmergencyScreen}
-        options={{ title: 'Emergency' }}
+        options={{ title: 'Help', headerShown: false }}
       />
       <Tab.Screen
         name="Journal"
-        component={JournalScreen}
-        options={{ title: 'Journal' }}
+        component={JournalListScreen}
+        options={{ title: 'Journal', headerShown: false }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
+        component={ProfileStackNavigator}
+        options={{ title: 'Profile', headerShown: false }}
       />
     </Tab.Navigator>
   );

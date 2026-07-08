@@ -6,16 +6,17 @@ import * as SecureStore from 'expo-secure-store';
 import apiClient from './api';
 import { STORAGE_KEYS } from '../constants';
 import type {
-  AuthResponse,
-  LoginRequest,
   RegisterRequest,
+  LoginRequest,
+  RegisterResponse,
+  LoginResponse,
   User,
 } from '../types';
 
 /**
  * Store auth tokens securely
  */
-async function storeTokens(accessToken: string, refreshToken: string): Promise<void> {
+export async function storeTokens(accessToken: string, refreshToken: string): Promise<void> {
   await SecureStore.setItemAsync(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
   await SecureStore.setItemAsync(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
 }
@@ -30,28 +31,30 @@ export async function clearTokens(): Promise<void> {
 
 /**
  * Register a new anonymous user
+ * POST /api/v1/auth/register
  */
-export async function register(data: RegisterRequest): Promise<AuthResponse> {
-  const response = await apiClient.post<{ success: boolean; data: AuthResponse }>(
+export async function register(data: RegisterRequest): Promise<RegisterResponse> {
+  const response = await apiClient.post<{ success: boolean; data: RegisterResponse }>(
     '/auth/register',
     data
   );
-  const { user, tokens } = response.data.data;
-  await storeTokens(tokens.accessToken, tokens.refreshToken);
-  return response.data.data;
+  const result = response.data.data;
+  await storeTokens(result.tokens.accessToken, result.tokens.refreshToken);
+  return result;
 }
 
 /**
- * Login with username and password
+ * Login with email and password
+ * POST /api/v1/auth/login
  */
-export async function login(data: LoginRequest): Promise<AuthResponse> {
-  const response = await apiClient.post<{ success: boolean; data: AuthResponse }>(
+export async function login(data: LoginRequest): Promise<LoginResponse> {
+  const response = await apiClient.post<{ success: boolean; data: LoginResponse }>(
     '/auth/login',
     data
   );
-  const { user, tokens } = response.data.data;
-  await storeTokens(tokens.accessToken, tokens.refreshToken);
-  return response.data.data;
+  const result = response.data.data;
+  await storeTokens(result.tokens.accessToken, result.tokens.refreshToken);
+  return result;
 }
 
 /**

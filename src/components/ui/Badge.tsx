@@ -12,6 +12,7 @@ interface BadgeProps {
   variant?: BadgeVariant;
   size?: 'sm' | 'md';
   dot?: boolean;
+  className?: string;
 }
 
 const variantStyles: Record<BadgeVariant, { bg: string; text: string; dot: string }> = {
@@ -27,6 +28,7 @@ export default function Badge({
   variant = 'default',
   size = 'sm',
   dot = false,
+  className = '',
 }: BadgeProps) {
   const styles = variantStyles[variant];
   const isSmall = size === 'sm';
@@ -37,6 +39,7 @@ export default function Badge({
         flex-row items-center self-start
         ${styles.bg}
         ${isSmall ? 'px-2 py-0.5 rounded-md' : 'px-3 py-1 rounded-lg'}
+        ${className}
       `}
       accessibilityRole="text"
       accessibilityLabel={label}

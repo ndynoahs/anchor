@@ -17,8 +17,16 @@ export class AppError extends Error {
 
 // --- User ---
 export interface User {
-  id: string;
+  userId: string;
   anonymousUsername: string;
+  avatarUrl: string | null;
+  email?: string;
+  timezone: string;
+  isPremium: boolean;
+  premiumExpiresAt?: string;
+  streakDays: number;
+  longestStreak: number;
+  soberSince?: string;
   createdAt: string;
   lastActiveAt: string;
   preferences: UserPreferences;
@@ -34,18 +42,40 @@ export interface UserPreferences {
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
-  expiresAt: number;
+  expiresIn: number;
 }
 
 export interface RegisterRequest {
-  anonymousUsername: string;
-  password: string;
-  confirmPassword: string;
+  email?: string;
+  timezone?: string;
+  fcmToken?: string;
 }
 
 export interface LoginRequest {
-  anonymousUsername: string;
+  email: string;
   password: string;
+}
+
+export interface RegisterResponse {
+  user: {
+    userId: string;
+    anonymousUsername: string;
+    avatarUrl: string;
+    timezone: string;
+    createdAt: string;
+  };
+  tokens: AuthTokens;
+}
+
+export interface LoginResponse {
+  user: {
+    userId: string;
+    anonymousUsername: string;
+    avatarUrl: string;
+    isPremium: boolean;
+    lastActiveAt: string;
+  };
+  tokens: AuthTokens;
 }
 
 export interface AuthResponse {
@@ -53,35 +83,78 @@ export interface AuthResponse {
   tokens: AuthTokens;
 }
 
-// --- Community Post ---
+// --- Community ---
+export interface Community {
+  communityId: string;
+  name: string;
+  description: string;
+  category: string;
+  memberCount: number;
+  postCount: number;
+  isPrivate: boolean;
+  createdAt: string;
+}
+
+export interface CommunityDetail extends Community {
+  rules: string[];
+  createdBy: string;
+  membership?: {
+    role: string;
+    joinedAt: string;
+  };
+}
+
+// --- Community Posts ---
 export interface Post {
-  id: string;
+  postId: string;
+  communityId: string;
   authorId: string;
   authorUsername: string;
-  content: string;
-  tags: string[];
   isAnonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
+  title: string;
+  content: string;          // truncated in list view
+  tags: string[];
   likeCount: number;
   commentCount: number;
-  isLikedByMe: boolean;
+  isPinned: boolean;
+  isLikedByMe?: boolean;
+  createdAt: string;
+}
+
+export interface PostDetail extends Post {
+  isLocked: boolean;
+  updatedAt: string;
 }
 
 export interface CreatePostRequest {
+  title: string;
   content: string;
   tags?: string[];
   isAnonymous?: boolean;
 }
 
 // --- Emergency ---
-export interface EmergencyRequest {
-  id: string;
-  userId: string;
-  createdAt: string;
-  status: 'pending' | 'matched' | 'resolved';
-  matchedPeerId?: string;
-  resolvedAt?: string;
+export interface EmergencyRequestPayload {
+  trigger?: string;
+  priority?: 'normal' | 'high';
+}
+
+export interface EmergencyRequestResponse {
+  sessionId: string;
+  status: string;
+  estimatedWaitSeconds: number;
+  requestedAt: string;
+}
+
+export interface EmergencySessionStatus {
+  sessionId: string;
+  status: 'waiting' | 'active' | 'completed' | 'expired';
+  responderId: string | null;
+  responderUsername: string | null;
+  conversationId: string | null;
+  requestedAt: string;
+  respondedAt: string | null;
+  endedAt: string | null;
 }
 
 export interface PeerMatch {
@@ -89,6 +162,16 @@ export interface PeerMatch {
   peerUsername: string;
   matchedAt: string;
   sessionId: string;
+}
+
+// --- Post Comment / Reply ---
+export interface Comment {
+  commentId: string;
+  postId: string;
+  authorId: string;
+  authorUsername: string;
+  content: string;
+  createdAt: string;
 }
 
 // --- Message ---
