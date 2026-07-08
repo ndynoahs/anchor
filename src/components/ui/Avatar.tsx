@@ -5,18 +5,20 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-type AvatarSize = 'sm' | 'md' | 'lg';
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 interface AvatarProps {
   username: string;
   size?: AvatarSize;
   online?: boolean;
+  className?: string;
 }
 
 const sizeMap: Record<AvatarSize, { container: number; text: string }> = {
   sm: { container: 32, text: 'text-xs' },
   md: { container: 44, text: 'text-base' },
   lg: { container: 64, text: 'text-2xl' },
+  xl: { container: 80, text: 'text-3xl' },
 };
 
 /**
@@ -54,12 +56,12 @@ function getInitials(username: string): string {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export default function Avatar({ username, size = 'md', online = false }: AvatarProps) {
+export default function Avatar({ username, size = 'md', online = false, className = '' }: AvatarProps) {
   const dims = sizeMap[size];
   const bgColor = getColorFromUsername(username);
 
   return (
-    <View className="relative" accessibilityRole="image" accessibilityLabel={`Avatar for ${username}`}>
+    <View className={`relative ${className}`} accessibilityRole="image" accessibilityLabel={`Avatar for ${username}`}>
       <View
         style={{
           width: dims.container,

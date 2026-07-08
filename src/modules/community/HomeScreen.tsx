@@ -67,7 +67,7 @@ export default function HomeScreen() {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileTab')}
+            onPress={() => navigation.navigate('Profile')}
             accessibilityLabel="View profile"
           >
             <Avatar
@@ -96,7 +96,7 @@ export default function HomeScreen() {
         <Animated.View style={{ transform: [{ scale: pulseAnim }] }} className="mb-6">
           <TouchableOpacity
             className="bg-red-600/90 rounded-2xl p-5 items-center"
-            onPress={() => navigation.navigate('EmergencyTab')}
+            onPress={() => navigation.navigate('Emergency')}
             accessibilityLabel="Need to talk to someone? Emergency support"
             activeOpacity={0.8}
           >
@@ -113,7 +113,7 @@ export default function HomeScreen() {
         {/* Quick Journal Entry */}
         <Card className="mb-6" highlighted>
           <TouchableOpacity
-            onPress={() => navigation.navigate('JournalTab')}
+            onPress={() => navigation.navigate('Journal')}
             className="flex-row items-center"
             accessibilityLabel="Quick journal entry"
           >
@@ -138,7 +138,7 @@ export default function HomeScreen() {
             <Text className="text-white text-lg font-semibold">
               Recent in communities
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('CommunityTab')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Community')}>
               <Text className="text-teal-400 text-sm">See all</Text>
             </TouchableOpacity>
           </View>

@@ -6,56 +6,26 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 
+import HomeScreen from '../modules/community/HomeScreen';
+import CommunityScreen from '../modules/community/CommunityScreen';
+import EmergencyScreen from '../modules/emergency/EmergencyScreen';
+import JournalListScreen from '../modules/journal/JournalListScreen';
+import ProfileStackNavigator from './ProfileStackNavigator';
+
 const Tab = createBottomTabNavigator();
 
-// Placeholder screens until feature modules are built
-function HomeScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Home</Text>
-      <Text className="text-deep-300 text-sm mt-2">Your recovery journey</Text>
-    </View>
-  );
-}
-
-function CommunityScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Community</Text>
-      <Text className="text-deep-300 text-sm mt-2">Connect with peers</Text>
-    </View>
-  );
-}
-
-function EmergencyScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Emergency</Text>
-      <Text className="text-deep-300 text-sm mt-2">Reach someone now</Text>
-    </View>
-  );
-}
-
-function ProfileScreen() {
-  return (
-    <View className="flex-1 items-center justify-center bg-deep-900">
-      <Text className="text-white text-lg">Profile</Text>
-      <Text className="text-deep-300 text-sm mt-2">Your account</Text>
-    </View>
-  );
-}
-
-// Simple TabBar icon component
+// TabBar icon component
 function TabIcon({ label, focused }: { label: string; focused: boolean }) {
   const icons: Record<string, string> = {
     Home: '🏠',
     Community: '💬',
     Emergency: '🆘',
+    Journal: '📓',
     Profile: '👤',
   };
 
   return (
-    <View className="items-center">
+    <View className="items-center" accessibilityLabel={label}>
       <Text className={`text-xl ${focused ? 'opacity-100' : 'opacity-50'}`}>
         {icons[label] || '•'}
       </Text>
@@ -64,8 +34,6 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
 }
 
 export default function TabNavigator() {
-  const isEmergency = false; // Will be connected to emergency state later
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -100,26 +68,28 @@ export default function TabNavigator() {
     >
       <Tab.Screen
         name="Home"
-        component={isEmergency ? EmergencyScreen : HomeScreen}
-        options={{ title: 'Home' }}
+        component={HomeScreen}
+        options={{ title: 'Home', headerShown: false }}
       />
       <Tab.Screen
         name="Community"
         component={CommunityScreen}
-        options={{ title: 'Community' }}
+        options={{ title: 'Community', headerShown: false }}
       />
       <Tab.Screen
         name="Emergency"
         component={EmergencyScreen}
-        options={{
-          title: 'Emergency',
-          tabBarBadge: undefined,
-        }}
+        options={{ title: 'Help', headerShown: false }}
+      />
+      <Tab.Screen
+        name="Journal"
+        component={JournalListScreen}
+        options={{ title: 'Journal', headerShown: false }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
-        options={{ title: 'Profile' }}
+        component={ProfileStackNavigator}
+        options={{ title: 'Profile', headerShown: false }}
       />
     </Tab.Navigator>
   );
